@@ -1,0 +1,36 @@
+<h1>
+  Welcome to Tulip fever!!
+</h1>
+<div style="display:inline-block; margin:20px">
+  <div *ngIf="loading">Loading...</div>
+  <div *ngIf="!loading" style="margin-bottom:20px">{{lastUpdate}}</div>
+  <img height="300" src="assets/tulip.png" />
+</div>
+
+<div style="display:inline-block">
+  <div *ngFor="let balance of balances">
+    <h2>{{balance.source}}</h2>
+    <div>
+      {{balance.baseCurrency}} {{balance.baseValue}}
+    </div>
+    <div>
+      R {{balance.randValue}} <span *ngIf="balance.change > 0"> (Up R{{balance.change}})</span><span *ngIf="balance.change < 0"> (Down R{{balance.change}})</span>
+    </div>
+  </div>
+
+  <div *ngIf="btczar && ethbtc">
+    <h2>Rates</h2>
+    <div>1 XBT = {{btczar.price}} ZAR</div>
+    <div>1 ETH = {{ethbtc.price}} XBT</div>
+    <div>1 ETH = {{ethbtc.price * btczar.price}} ZAR</div>
+  </div>
+  <div style="font-weight: bold" class="loss" [ngClass]="{'profit' : gainLoss >= 0}">
+    <h2>Summary</h2>
+    <div>XBT {{totalBTC}}</div>
+    <div> R {{totalRand}}</div>
+    <br/>
+    <div>Initial : R{{investment}}</div>
+    <div>Profit/Loss : R{{gainLoss}} ({{gainLossPercent}}%)</div>
+
+  </div>
+</div>
