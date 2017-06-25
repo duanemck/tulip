@@ -1,4 +1,51 @@
-<h1>
+<md-sidenav-container [class.m2app-dark]="isDarkTheme">
+
+  <md-sidenav #sidenav mode="side" class="app-sidenav">
+    Sidenav
+  </md-sidenav>
+
+  <md-toolbar color="primary">
+    <button md-button class="app-icon-button" (click)="sidenav.toggle()">
+      <i class="material-icons app-toolbar-menu">menu</i>
+    </button> Tulip Fever!
+    <span class="app-toolbar-filler"></span>
+    <md-spinner *ngIf="loading" color="accent" class="app-spinner"></md-spinner>
+    Updated: {{lastUpdate}}
+
+  </md-toolbar>
+
+  <div class="app-content">
+      <md-card *ngFor="let balance of balances">
+      <md-card-title>{{balance.source}}</md-card-title>
+      <md-card-content>{{balance.baseCurrency}} {{balance.baseValue}}</md-card-content>
+      <md-card-content>
+        R {{balance.randValue}} <span *ngIf="balance.change > 0"> (Up R{{balance.change}})</span><span *ngIf="balance.change < 0"> (Down R{{balance.change}})</span>
+      </md-card-content>
+    </md-card>
+    <md-card *ngIf="btczar && ethbtc">
+      <md-card-title>Rates</md-card-title>
+      <md-card-content>1 XBT = {{btczar.price}} ZAR</md-card-content>
+      <md-card-content>1 ETH = {{ethbtc.price}} XBT</md-card-content>
+      <md-card-content>1 ETH = {{ethbtc.price * btczar.price}} ZAR</md-card-content>
+    </md-card>
+    <md-card *ngIf="balances" style="font-weight: bold" class="loss" [ngClass]="{'profit' : gainLoss >= 0}">
+      <md-card-title>Summary</md-card-title>
+      <md-card-content>XBT {{totalBTC}}</md-card-content>
+      <md-card-content> R {{totalRand}}</md-card-content>
+      <br/>
+      <md-card-content>Initial : R{{investment}}</md-card-content>
+      <md-card-content>Profit/Loss : R{{gainLoss}} ({{gainLossPercent}}%)</md-card-content>
+
+    </md-card>
+  </div>
+
+</md-sidenav-container>
+
+<span class="app-action" [class.m2app-dark]="isDarkTheme">
+  <button (click)="refresh()" md-fab><md-icon>refresh circle</md-icon></button>
+</span>
+
+<!--<h1>
   Welcome to Tulip fever!!
 </h1>
 <div style="display:inline-block; margin:20px">
@@ -7,30 +54,114 @@
   <img height="300" src="assets/tulip.png" />
 </div>
 
-<div style="display:inline-block">
-  <div *ngFor="let balance of balances">
-    <h2>{{balance.source}}</h2>
-    <div>
-      {{balance.baseCurrency}} {{balance.baseValue}}
-    </div>
-    <div>
-      R {{balance.randValue}} <span *ngIf="balance.change > 0"> (Up R{{balance.change}})</span><span *ngIf="balance.change < 0"> (Down R{{balance.change}})</span>
-    </div>
-  </div>
 
-  <div *ngIf="btczar && ethbtc">
-    <h2>Rates</h2>
-    <div>1 XBT = {{btczar.price}} ZAR</div>
-    <div>1 ETH = {{ethbtc.price}} XBT</div>
-    <div>1 ETH = {{ethbtc.price * btczar.price}} ZAR</div>
-  </div>
-  <div style="font-weight: bold" class="loss" [ngClass]="{'profit' : gainLoss >= 0}">
-    <h2>Summary</h2>
-    <div>XBT {{totalBTC}}</div>
-    <div> R {{totalRand}}</div>
-    <br/>
-    <div>Initial : R{{investment}}</div>
-    <div>Profit/Loss : R{{gainLoss}} ({{gainLossPercent}}%)</div>
+-->
 
-  </div>
-</div>
+<!--<md-card>
+      <md-checkbox>Unchecked</md-checkbox>
+      <md-checkbox [checked]="true">Checked</md-checkbox>
+      <md-checkbox [indeterminate]="true">Indeterminate</md-checkbox>
+      <md-checkbox [disabled]="true">Disabled</md-checkbox>
+    </md-card>
+
+    <md-card>
+      <md-radio-button name="symbol">Alpha</md-radio-button>
+      <md-radio-button name="symbol">Beta</md-radio-button>
+      <md-radio-button name="symbol" disabled>Gamma</md-radio-button>
+    </md-card>
+
+    <md-card class="app-input-section">
+      <md-input-container>
+        <input mdInput placeholder="First name" />
+      </md-input-container>
+      <md-input-container>
+        <input mdInput #nickname placeholder="Nickname" maxlength="50" />
+        <md-hint align="end">
+          {{nickname.characterCount}} / 50
+        </md-hint>
+
+      </md-input-container>
+
+      <md-input-container>
+        <input mdInput/>
+        <md-placeholder>
+          <i class="material-icons app-input-icon">android</i> Favorite phone
+        </md-placeholder>
+
+      </md-input-container>
+
+      <md-input-container>
+        <input mdInput placeholder="Motorcycle model" />
+        <span mdPrefix>
+          <i class="material-icons app-input-icon">motorcycle</i>
+          &nbsp;
+        </span>
+      </md-input-container>
+    </md-card>
+
+    <md-card>
+      <md-list class="app-list">
+        <md-list-item *ngFor="let food of foods">
+          <h3 md-line>{{food.name}}</h3>
+          <p md-line class="demo-secondary-text">{{food.rating}}</p>
+        </md-list-item>
+      </md-list>
+    </md-card>
+
+    <md-card>
+      <md-spinner class="app-spinner"></md-spinner>
+      <md-spinner color="accent" class="app-spinner"></md-spinner>
+    </md-card>
+
+    <md-card>
+      <label>
+        Indeterminate progress-bar
+        <md-progress-bar
+            class="app-progress"
+            mode="indeterminate"
+            aria-label="Indeterminate progress-bar example"></md-progress-bar>
+      </label>
+
+      <label>
+        Determinate progress bar - {{progress}}%
+        <md-progress-bar
+            class="app-progress"
+            color="accent"
+            mode="determinate"
+            [value]="progress"
+            aria-label="Determinate progress-bar example"></md-progress-bar>
+      </label>
+    </md-card>
+
+    <md-card>
+      <md-tab-group>
+        <md-tab label="Earth">
+          <p>EARTH</p>
+        </md-tab>
+        <md-tab label="Fire">
+          <p>FIRE</p>
+        </md-tab>
+      </md-tab-group>
+    </md-card>
+
+    <md-card>
+      <md-icon>build</md-icon>
+    </md-card>
+
+    <md-card>
+      <button md-button [md-menu-trigger-for]="menu">
+        MENU
+      </button>
+    </md-card>
+
+    <md-menu #menu="mdMenu">
+      <button md-menu-item>Lemon</button>
+      <button md-menu-item>Lime</button>
+      <button md-menu-item>Banana</button>
+    </md-menu>
+
+    <md-card>
+      <p>Last dialog result: {{lastDialogResult}}</p>
+      <button md-raised-button (click)="openDialog()">DIALOG</button>
+      <button md-raised-button (click)="showSnackbar()">SNACKBAR</button>
+    </md-card>-->

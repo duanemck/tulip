@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { Ticker } from 'app/ticker';
 
 @Component({
-  selector: 'app-root',
+  selector: 'tulip-root ',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
   totalRand: number;
   totalBTC: number;
   title = 'app';
-  balances: CryptoBalance[] = [];
+  balances: CryptoBalance[];
   investment = 1000;
   loading = true;
 
