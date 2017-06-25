@@ -15,11 +15,13 @@
   </md-toolbar>
 
   <div class="app-content">
-      <md-card *ngFor="let balance of balances">
-      <md-card-title>{{balance.source}}</md-card-title>
-      <md-card-content>{{balance.baseCurrency}} {{balance.baseValue}}</md-card-content>
+    <md-card *ngFor="let balance of balances">
+      <md-card-title>
+        <span class="source">{{balance.source}}</span>
+      </md-card-title>
       <md-card-content>
-        R {{balance.randValue}} <span *ngIf="balance.change > 0"> (Up R{{balance.change}})</span><span *ngIf="balance.change < 0"> (Down R{{balance.change}})</span>
+        <span class="value"><img src="assets/{{balance.baseCurrency}}.png" class="symbol"/></span>
+        <span class="value"> {{balance.baseValue}} = R {{balance.randValue}}</span>
       </md-card-content>
     </md-card>
     <md-card *ngIf="btczar && ethbtc">

@@ -82,3 +82,19 @@ md-sidenav-layout.m2app-dark {
 .app-progress {
   margin: 20px;
 }
+
+.source {
+  font-size:30px;
+  color:#3f51b5;
+}
+
+.value {
+  font-size:20px;
+  line-height:30px;
+  height:30px;
+  vertical-align: middle;
+}
+
+img.symbol {
+  height:23px;
+}

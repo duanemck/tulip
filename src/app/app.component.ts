@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.refresh();
-    setInterval(() => this.refresh(), 30 * 1000);
+    //setInterval(() => this.refresh(), 30 * 1000);
   }
 
   refresh() {
