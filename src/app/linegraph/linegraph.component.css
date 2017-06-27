@@ -1,0 +1,9 @@
+:host {
+  display: block;
+  width:100%;
+  height:200px;
+}
+
+canvas {
+  height:200px;
+}

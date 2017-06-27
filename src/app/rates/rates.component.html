@@ -1,0 +1,17 @@
+<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="start center">
+  <md-card fxFlex *ngIf="btczar">
+    <md-card-content>
+      <span class="value"><img src="assets/xbt.png" class="symbol"/> = R {{btczar.price}}</span>
+    </md-card-content>
+  </md-card>
+  <md-card fxFlex  *ngIf="ethbtc">
+    <md-card-content>
+      <span class="value"><img src="assets/eth.png" class="symbol"/> = <img src="assets/xbt.png" class="symbol"/> {{ethbtc.price}}</span>
+    </md-card-content>
+  </md-card>
+  <md-card fxFlex  *ngIf="btczar">
+    <md-card-content>
+      <span class="value"><img src="assets/eth.png" class="symbol"/> = R {{ethbtc.price * btczar.price}}</span>
+    </md-card-content>
+  </md-card>
+</div>

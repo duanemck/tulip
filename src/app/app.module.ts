@@ -4,33 +4,57 @@ import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
+import { AccountComponent } from './account/account.component';
 import { DataService } from 'app/data.service';
 import { ChartsModule } from 'ng2-charts';
 
+import { RouterModule } from '@angular/router';
+
 import { LinegraphComponent } from './linegraph/linegraph.component';
-import { WalletComponent } from './wallet/wallet.component'
+
 import {
-  MdInputModule, MdSidenavModule, MdCheckboxModule, MdToolbarModule,
-  MdMenuModule, MdCardModule, MdListModule, MdTabsModule, MdRadioModule, MdProgressBarModule,
+  MdSidenavModule, MdToolbarModule, MdMenuModule, MdCardModule,
   MdButtonModule, MdIconModule, MdProgressSpinnerModule
 } from '@angular/material';
+
+// MdInputModule,MdCheckboxModule,MdListModule, MdTabsModule, MdRadioModule, MdProgressBarModule,
+
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { RatesComponent } from './rates/rates.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LinegraphComponent,
-    WalletComponent
+    AccountComponent,
+    RatesComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
     ChartsModule,
     BrowserAnimationsModule,
-    MdInputModule,
     MdSidenavModule,
-    MdCheckboxModule,
-    MdToolbarModule, MdMenuModule, MdCardModule, MdListModule, MdTabsModule, MdRadioModule,
-    MdProgressBarModule, MdButtonModule, MdIconModule,MdProgressSpinnerModule
+    MdToolbarModule,
+    MdMenuModule,
+    MdCardModule,
+    MdButtonModule,
+    MdIconModule,
+    MdProgressSpinnerModule,
+    FlexLayoutModule,
+    RouterModule.forRoot([
+      {
+        path: '',
+        redirectTo: '/accounts',
+        pathMatch: 'full'
+      }, {
+        path: 'accounts',
+        component: AccountComponent
+      }, {
+        path: 'rates',
+        component: RatesComponent
+      }
+    ])
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
