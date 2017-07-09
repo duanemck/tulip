@@ -65,8 +65,8 @@ export class RatesComponent implements OnInit {
       .subscribe((results: Ticker[][]) => {
         const [btczar, ethbtc] = results;
 
-        this.zarxbtGraph = this.buildGraphOptions('ZAR/XBT', btczar);
-        this.ethxbtGraph = this.buildGraphOptions('ETH/XBT', ethbtc);
+        this.zarxbtGraph = this.buildGraphOptions('ZAR/XBT Today', btczar, true);
+        this.ethxbtGraph = this.buildGraphOptions('ETH/XBT Today', ethbtc, true);
 
         const calculated = [];
         for (let i = 0; i < btczar.length; i++) {
@@ -75,7 +75,7 @@ export class RatesComponent implements OnInit {
             price: btczar[i].price * ethbtc[i].price
           });
         }
-        this.zarethGraph = this.buildGraphOptions('ZAR/ETH', calculated);
+        this.zarethGraph = this.buildGraphOptions('ZAR/ETH Today', calculated, true);
       });
 
     const bitcoinDaily$ = this.dataService.getDaily('XBTZAR');
@@ -85,26 +85,26 @@ export class RatesComponent implements OnInit {
       .subscribe((results: Ticker[][]) => {
         const [btczar, ethbtc] = results;
 
-        this.zarxbtGraph2 = this.buildGraphOptions('ZAR/XBT', btczar);
-        this.ethxbtGraph2 = this.buildGraphOptions('ETH/XBT', ethbtc);
+        this.zarxbtGraph2 = this.buildGraphOptions('ZAR/XBT Daily', btczar, false);
+        this.ethxbtGraph2 = this.buildGraphOptions('ETH/XBT Daily', ethbtc, false);
 
         const calculated = [];
         for (let i = 0; i < btczar.length; i++) {
           calculated.push({
-            time: btczar[i].time,
+            date: btczar[i].date,
             price: btczar[i].price * ethbtc[i].price
           });
         }
-        this.zarethGraph2 = this.buildGraphOptions('ZAR/ETH', calculated);
+        this.zarethGraph2 = this.buildGraphOptions('ZAR/ETH Daily', calculated, false);
       });
 
   }
 
-  private buildGraphOptions(title: string, tickerData: Ticker[]) {
+  private buildGraphOptions(title: string, tickerData: Ticker[], intraday: boolean) {
     return {
       title: { text: title },
       series: [{
-        data: this.toGraphData(tickerData)
+        data: intraday ? this.toIntradayGraphData(tickerData) : this.toDailyGraphData(tickerData)
       }],
       xAxis: {
         type: 'datetime'
@@ -112,8 +112,18 @@ export class RatesComponent implements OnInit {
     }
   }
 
-  private toGraphData(data: Ticker[]) {
-    return data.map(t => [moment(t.time).add('hours', 2).valueOf(), t.price])
+  private toIntradayGraphData(data: Ticker[]) {
+    return data.map(t => {
+      const x = [moment(t.time).add('hours', 2).valueOf(), t.price];
+      return x;
+    });
+  }
+
+  private toDailyGraphData(data: Ticker[]) {
+    return data.map(t => {
+      const x = [moment(t.date).valueOf(), t.price];
+      return x;
+    });
   }
 }
 
