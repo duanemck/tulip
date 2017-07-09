@@ -3,15 +3,37 @@
     <md-card-content>
       <span class="value"><img src="assets/xbt.png" class="symbol"/> = R {{btczar.price}}</span>
     </md-card-content>
+    <md-card-content>
+      <chart [options]="zarxbtGraph"></chart>
+    </md-card-content>
+    <md-card-content>
+      <chart [options]="zarxbtGraph2"></chart>
+    </md-card-content>
   </md-card>
   <md-card fxFlex  *ngIf="ethbtc">
     <md-card-content>
       <span class="value"><img src="assets/eth.png" class="symbol"/> = <img src="assets/xbt.png" class="symbol"/> {{ethbtc.price}}</span>
+    </md-card-content>
+    <md-card-content>
+      <chart [options]="ethxbtGraph"></chart>
+    </md-card-content>
+    <md-card-content>
+      <chart [options]="ethxbtGraph2"></chart>
     </md-card-content>
   </md-card>
   <md-card fxFlex  *ngIf="btczar">
     <md-card-content>
       <span class="value"><img src="assets/eth.png" class="symbol"/> = R {{ethbtc.price * btczar.price}}</span>
     </md-card-content>
+    <md-card-content>
+      <chart [options]="zarethGraph"></chart>
+    </md-card-content>
+    <md-card-content>
+      <chart [options]="zarethGraph2"></chart>
+    </md-card-content>
+
   </md-card>
 </div>
+
+
+

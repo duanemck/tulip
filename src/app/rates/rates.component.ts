@@ -2,7 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { DataService } from '../data.service';
 import { CryptoBalance } from '../cryptobalance';
 import { Ticker } from 'app/ticker';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
+import * as moment from 'moment';
 
 @Component({
   selector: 'tulip-rates ',
@@ -21,6 +22,13 @@ export class RatesComponent implements OnInit {
   lastUpdate: string;
 
   loading = true;
+  zarxbtGraph: Object;
+  ethxbtGraph: Object;
+  zarethGraph: Object;
+
+  zarxbtGraph2: Object;
+  ethxbtGraph2: Object;
+  zarethGraph2: Object;
 
   constructor(private dataService: DataService) {
 
@@ -49,6 +57,63 @@ export class RatesComponent implements OnInit {
         this.loading = false;
         this.lastUpdate = new Date().toLocaleTimeString();
       });
+
+    const bitcoinRate$ = this.dataService.getIntraday('XBTZAR');
+    const etherRate$ = this.dataService.getIntraday('ethbtc');
+
+    Observable.forkJoin([bitcoinRate$, etherRate$])
+      .subscribe((results: Ticker[][]) => {
+        const [btczar, ethbtc] = results;
+
+        this.zarxbtGraph = this.buildGraphOptions('ZAR/XBT', btczar);
+        this.ethxbtGraph = this.buildGraphOptions('ETH/XBT', ethbtc);
+
+        const calculated = [];
+        for (let i = 0; i < btczar.length; i++) {
+          calculated.push({
+            time: btczar[i].time,
+            price: btczar[i].price * ethbtc[i].price
+          });
+        }
+        this.zarethGraph = this.buildGraphOptions('ZAR/ETH', calculated);
+      });
+
+    const bitcoinDaily$ = this.dataService.getDaily('XBTZAR');
+    const etherDaily$ = this.dataService.getDaily('ethbtc');
+
+    Observable.forkJoin([bitcoinDaily$, etherDaily$])
+      .subscribe((results: Ticker[][]) => {
+        const [btczar, ethbtc] = results;
+
+        this.zarxbtGraph2 = this.buildGraphOptions('ZAR/XBT', btczar);
+        this.ethxbtGraph2 = this.buildGraphOptions('ETH/XBT', ethbtc);
+
+        const calculated = [];
+        for (let i = 0; i < btczar.length; i++) {
+          calculated.push({
+            time: btczar[i].time,
+            price: btczar[i].price * ethbtc[i].price
+          });
+        }
+        this.zarethGraph2 = this.buildGraphOptions('ZAR/ETH', calculated);
+      });
+
+  }
+
+  private buildGraphOptions(title: string, tickerData: Ticker[]) {
+    return {
+      title: { text: title },
+      series: [{
+        data: this.toGraphData(tickerData)
+      }],
+      xAxis: {
+        type: 'datetime'
+      },
+    }
+  }
+
+  private toGraphData(data: Ticker[]) {
+    return data.map(t => [moment(t.time).add('hours', 2).valueOf(), t.price])
   }
 }
 

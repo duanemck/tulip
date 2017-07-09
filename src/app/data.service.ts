@@ -33,6 +33,18 @@ export class DataService {
       .get(`${server}/api/prices/${ticker}/latest`)
       .map(response => response.json() as Ticker);
   }
+
+  getIntraday(ticker: string): Observable<Ticker[]> {
+    return this.http
+      .get(`${server}/api/prices/${ticker}/graph/intraday`)
+      .map(response => response.json() as Ticker[]);
+  }
+
+  getDaily(ticker: string): Observable<Ticker[]> {
+    return this.http
+      .get(`${server}/api/prices/${ticker}/graph/daily?from=2017-06-01`)
+      .map(response => response.json() as Ticker[]);
+  }
 }
 
 

@@ -1,6 +1,6 @@
 import { DataService } from './data.service';
 import { CryptoBalance } from './cryptobalance';
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input } from '@angular/core';
 import 'rxjs/add/observable/forkJoin';
 import { Observable } from 'rxjs/Observable';
 
