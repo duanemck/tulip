@@ -1,4 +1,27 @@
 Updated: {{lastUpdate}}
+
+<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="start center">
+  <md-card fxFlex *ngIf="balances">
+    <md-card-title>
+      <span class="source">Performance</span>
+    </md-card-title>
+    <md-card-content>Initial : R{{investment}} less R{{fees}} fees</md-card-content>
+    <md-card-content>Profit/Loss : R{{gainLoss}} ({{gainLossPercent}}%)</md-card-content>
+  </md-card>
+  <md-card fxFlex *ngIf="balances">
+    <md-card-title>
+      <span class="source">Combined</span>
+    </md-card-title>
+    <md-card-content>
+      <span class="value"><img src="assets/xbt.png" class="symbol"/></span>
+      <span class="value"> {{totalBTC}} = R {{totalRand}}</span>
+    </md-card-content>
+  </md-card>
+
+
+</div>
+<hr/>
+
 <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="start center">
   <md-card fxFlex *ngFor="let balance of balances">
     <md-card-title>
@@ -11,27 +34,7 @@ Updated: {{lastUpdate}}
   </md-card>
 </div>
 
-<hr/>
 
-<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="start center">
-  <md-card fxFlex *ngIf="balances">
-    <md-card-title>
-      <span class="source">Combined</span>
-    </md-card-title>
-    <md-card-content>
-      <span class="value"><img src="assets/xbt.png" class="symbol"/></span>
-      <span class="value"> {{totalBTC}} = R {{totalRand}}</span>
-    </md-card-content>
-  </md-card>
-
-  <md-card fxFlex *ngIf="balances">
-    <md-card-title>
-      <span class="source">Performance</span>
-    </md-card-title>
-    <md-card-content>Initial : R{{investment}} less R{{fees}} fees</md-card-content>
-    <md-card-content>Profit/Loss : R{{gainLoss}} ({{gainLossPercent}}%)</md-card-content>
-  </md-card>
-</div>
 
 
 
