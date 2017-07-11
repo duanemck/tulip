@@ -1,3 +1,13 @@
 md-card {
-  min-height:60px;
+    min-height: 60px;
+}
+
+.chart-container {
+    display: inline-block;
+    width: 800px;
+    max-width: 100%
+}
+
+chart {
+    height: 200px;
 }

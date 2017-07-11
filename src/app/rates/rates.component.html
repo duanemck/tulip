@@ -1,39 +1,22 @@
-<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="start center">
-  <md-card fxFlex *ngIf="btczar">
-    <md-card-content>
-      <span class="value"><img src="assets/xbt.png" class="symbol"/> = R {{btczar.price}}</span>
-    </md-card-content>
-    <md-card-content>
-      <chart [options]="zarxbtGraph"></chart>
-    </md-card-content>
-    <md-card-content>
-      <chart [options]="zarxbtGraph2"></chart>
-    </md-card-content>
-  </md-card>
-  <md-card fxFlex  *ngIf="ethbtc">
-    <md-card-content>
-      <span class="value"><img src="assets/eth.png" class="symbol"/> = <img src="assets/xbt.png" class="symbol"/> {{ethbtc.price}}</span>
-    </md-card-content>
-    <md-card-content>
-      <chart [options]="ethxbtGraph"></chart>
-    </md-card-content>
-    <md-card-content>
-      <chart [options]="ethxbtGraph2"></chart>
-    </md-card-content>
-  </md-card>
-  <md-card fxFlex  *ngIf="btczar">
-    <md-card-content>
-      <span class="value"><img src="assets/eth.png" class="symbol"/> = R {{ethbtc.price * btczar.price}}</span>
-    </md-card-content>
-    <md-card-content>
-      <chart [options]="zarethGraph"></chart>
-    </md-card-content>
-    <md-card-content>
-      <chart [options]="zarethGraph2"></chart>
-    </md-card-content>
+<md-grid-list cols="3" rowHeight="3:1">
+  <md-grid-tile *ngIf="btczar">
+    <div class="value"><img src="assets/xbt.png" class="symbol" /> = R {{btczar.price}}</div>
+    <div class="chart-container">
+      <chart type="line" [data]="zarxbtGraph2" [options]="options"></chart>
+    </div>
+    <div class="chart-container">
+      <chart type="line" [data]="zarxbtGraph" [options]="options"></chart>
+    </div>
+  </md-grid-tile>
 
-  </md-card>
-</div>
+  <md-grid-tile *ngIf="ethbtc">
+    <div class="value"><img src="assets/eth.png" class="symbol" /> = R {{ethbtc.price * btczar.price}}</div>
+    <div class="chart-container">
+      <chart type="line" [data]="zarethGraph2" [options]="options"></chart>
+    </div>
+    <div class="chart-container">
+      <chart type="line" [data]="zarethGraph" [options]="options"></chart>
+    </div>
+  </md-grid-tile>
 
-
-
+</md-grid-list>

@@ -6,40 +6,26 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AccountComponent } from './account/account.component';
 import { DataService } from 'app/data.service';
-import { ChartModule } from 'angular2-highcharts';
 
 import { RouterModule } from '@angular/router';
-
-import { LinegraphComponent } from './linegraph/linegraph.component';
 
 import {
   MdSidenavModule, MdToolbarModule, MdMenuModule, MdCardModule,
   MdButtonModule, MdIconModule, MdProgressSpinnerModule
 } from '@angular/material';
 
-// MdInputModule,MdCheckboxModule,MdListModule, MdTabsModule, MdRadioModule, MdProgressBarModule,
-
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RatesComponent } from './rates/rates.component';
-
-import * as highcharts from 'highcharts';
-import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
-
-export function highchartsFactory() {
-  //const highcharts = require('highcharts');
-  // const dd = require('highcharts/modules/drilldown');
-  // dd(highcharts);
-  return highcharts;
-}
+import { ChartModule } from 'angular2-chartjs';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LinegraphComponent,
     AccountComponent,
     RatesComponent
   ],
   imports: [
+    ChartModule,
     BrowserModule,
     HttpModule,
     ChartModule,
@@ -66,11 +52,7 @@ export function highchartsFactory() {
       }
     ])
   ],
-  providers: [DataService,
-    {
-      provide: HighchartsStatic,
-      useFactory: highchartsFactory
-    }],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

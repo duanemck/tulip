@@ -23,12 +23,42 @@ export class RatesComponent implements OnInit {
 
   loading = true;
   zarxbtGraph: Object;
-  ethxbtGraph: Object;
   zarethGraph: Object;
-
   zarxbtGraph2: Object;
-  ethxbtGraph2: Object;
   zarethGraph2: Object;
+
+
+  type = 'line';
+  data = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        label: 'My First dataset',
+        data: [65, 59, 80, 81, 56, 55, 40]
+      }
+    ]
+  };
+  options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    elements: {
+      point: {
+        radius: 0
+      }
+    },
+    // scales: {
+    //   xAxes: {
+    //     type: 'time',
+    //     unit: 'hour',
+    //     unitStepSize: 1,
+    //     time: {
+    //       displayFormats: {
+    //         'hour': 'HH:mm'
+    //       }
+    //     }
+    //   }
+    // }
+  };
 
   constructor(private dataService: DataService) {
 
@@ -36,7 +66,13 @@ export class RatesComponent implements OnInit {
 
   ngOnInit(): void {
     this.refresh();
-    // setInterval(() => this.refresh(), 30 * 1000);
+    setInterval(() => this.refresh(), 60 * 1000 * 5);
+  }
+
+  saveInstance(name, chart) {
+    setTimeout(() => {
+      chart.reflow();
+    }, 5000);
   }
 
   refresh() {
@@ -66,14 +102,15 @@ export class RatesComponent implements OnInit {
         const [btczar, ethbtc] = results;
 
         this.zarxbtGraph = this.buildGraphOptions('ZAR/XBT Today', btczar, true);
-        this.ethxbtGraph = this.buildGraphOptions('ETH/XBT Today', ethbtc, true);
 
         const calculated = [];
         for (let i = 0; i < btczar.length; i++) {
-          calculated.push({
-            time: btczar[i].time,
-            price: btczar[i].price * ethbtc[i].price
-          });
+          if (btczar[i] && ethbtc[i]) {
+            calculated.push({
+              time: btczar[i].time,
+              price: btczar[i].price * ethbtc[i].price
+            });
+          }
         }
         this.zarethGraph = this.buildGraphOptions('ZAR/ETH Today', calculated, true);
       });
@@ -86,14 +123,15 @@ export class RatesComponent implements OnInit {
         const [btczar, ethbtc] = results;
 
         this.zarxbtGraph2 = this.buildGraphOptions('ZAR/XBT Daily', btczar, false);
-        this.ethxbtGraph2 = this.buildGraphOptions('ETH/XBT Daily', ethbtc, false);
 
         const calculated = [];
         for (let i = 0; i < btczar.length; i++) {
-          calculated.push({
-            date: btczar[i].date,
-            price: btczar[i].price * ethbtc[i].price
-          });
+          if (btczar[i] && ethbtc[i]) {
+            calculated.push({
+              date: btczar[i].date,
+              price: btczar[i].price * ethbtc[i].price
+            });
+          }
         }
         this.zarethGraph2 = this.buildGraphOptions('ZAR/ETH Daily', calculated, false);
       });
@@ -102,19 +140,19 @@ export class RatesComponent implements OnInit {
 
   private buildGraphOptions(title: string, tickerData: Ticker[], intraday: boolean) {
     return {
-      title: { text: title },
-      series: [{
-        data: intraday ? this.toIntradayGraphData(tickerData) : this.toDailyGraphData(tickerData)
-      }],
-      xAxis: {
-        type: 'datetime'
-      },
-    }
+      labels: tickerData.map(t => moment(t.date).format('YYYY-MM-DD')),
+      datasets: [
+        {
+          label: title,
+          data: tickerData.map(t => t.price)
+        }
+      ]
+    };
   }
 
   private toIntradayGraphData(data: Ticker[]) {
     return data.map(t => {
-      const x = [moment(t.time).add('hours', 2).valueOf(), t.price];
+      const x = [moment(t.time).add(2, 'hours').valueOf(), t.price];
       return x;
     });
   }
