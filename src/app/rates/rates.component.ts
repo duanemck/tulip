@@ -140,7 +140,7 @@ export class RatesComponent implements OnInit {
 
   private buildGraphOptions(title: string, tickerData: Ticker[], intraday: boolean) {
     return {
-      labels: tickerData.map(t => moment(t.date).format('YYYY-MM-DD')),
+      labels: tickerData.map(t => moment(intraday ? t.time : t.date).format(intraday ? 'HH:mm' : 'YYYY-MM-DD')),
       datasets: [
         {
           label: title,
@@ -152,7 +152,7 @@ export class RatesComponent implements OnInit {
 
   private toIntradayGraphData(data: Ticker[]) {
     return data.map(t => {
-      const x = [moment(t.time).add(2, 'hours').valueOf(), t.price];
+      const x = [moment(t.time).add(2, 'hours').format('HH:mm'), t.price];
       return x;
     });
   }
