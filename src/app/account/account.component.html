@@ -1,12 +1,12 @@
 Updated: {{lastUpdate}}
 
 <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="start center">
-  <md-card fxFlex *ngIf="balances">
+  <md-card fxFlex *ngIf="summary">
     <md-card-title>
       <span class="source">Performance</span>
     </md-card-title>
-    <md-card-content>Initial : R{{investment}} less R{{fees}} fees</md-card-content>
-    <md-card-content>Profit/Loss : R{{gainLoss}} ({{gainLossPercent}}%)</md-card-content>
+    <md-card-content>Initial : R{{summary.investment}} less R{{summary.fees}} fees</md-card-content>
+    <md-card-content>Profit/Loss : R{{summary.gainLoss}} ({{summary.gainLossPercent}}%)</md-card-content>
   </md-card>
   <md-card fxFlex *ngIf="balances">
     <md-card-title>
@@ -14,7 +14,7 @@ Updated: {{lastUpdate}}
     </md-card-title>
     <md-card-content>
       <span class="value"><img src="assets/xbt.png" class="symbol"/></span>
-      <span class="value"> {{totalBTC}} = R {{totalRand}}</span>
+      <span class="value"> {{summary.totalBTC}} = R {{summary.totalRand}}</span>
     </md-card-content>
   </md-card>
 
@@ -28,134 +28,18 @@ Updated: {{lastUpdate}}
       <span class="source">{{balance.source}}</span>
     </md-card-title>
     <md-card-content>
-      <span class="value"><img src="assets/{{balance.baseCurrency}}.png" class="symbol"/></span>
-      <span class="value"> {{balance.baseValue}} = R {{balance.randValue}}</span>
+      <div>
+        <span class="value"><img src="assets/{{balance.baseCurrency}}.png" class="symbol"/></span>
+        <span class="value"> {{balance.baseValue}} =  {{balance.currentValueRand | currency:'ZAR'}}</span>
+      </div>
+      <div>
+        <span class="value"> Today: {{balance.changeTodayRand | currency:'ZAR'}}</span>
+        <span class="value"> ({{balance.changeTodayPercent | percent}})</span>
+      </div>
+      <div>
+        <span class="value"> Overall: {{balance.changeSinceStartRand | currency:'ZAR'}}</span>
+        <span class="value"> ({{balance.changeSinceStartPercent | percent}})</span>
+      </div>
     </md-card-content>
   </md-card>
 </div>
-
-
-
-
-
-
-<!--<h1>
-  Welcome to Tulip fever!!
-</h1>
-<div style="display:inline-block; margin:20px">
-  <div *ngIf="loading">Loading...</div>
-  <div *ngIf="!loading" style="margin-bottom:20px">{{lastUpdate}}</div>
-  <img height="300" src="assets/tulip.png" />
-</div>
-
-
--->
-
-<!--<md-card>
-      <md-checkbox>Unchecked</md-checkbox>
-      <md-checkbox [checked]="true">Checked</md-checkbox>
-      <md-checkbox [indeterminate]="true">Indeterminate</md-checkbox>
-      <md-checkbox [disabled]="true">Disabled</md-checkbox>
-    </md-card>
-
-    <md-card>
-      <md-radio-button name="symbol">Alpha</md-radio-button>
-      <md-radio-button name="symbol">Beta</md-radio-button>
-      <md-radio-button name="symbol" disabled>Gamma</md-radio-button>
-    </md-card>
-
-    <md-card class="app-input-section">
-      <md-input-container>
-        <input mdInput placeholder="First name" />
-      </md-input-container>
-      <md-input-container>
-        <input mdInput #nickname placeholder="Nickname" maxlength="50" />
-        <md-hint align="end">
-          {{nickname.characterCount}} / 50
-        </md-hint>
-
-      </md-input-container>
-
-      <md-input-container>
-        <input mdInput/>
-        <md-placeholder>
-          <i class="material-icons app-input-icon">android</i> Favorite phone
-        </md-placeholder>
-
-      </md-input-container>
-
-      <md-input-container>
-        <input mdInput placeholder="Motorcycle model" />
-        <span mdPrefix>
-          <i class="material-icons app-input-icon">motorcycle</i>
-          &nbsp;
-        </span>
-      </md-input-container>
-    </md-card>
-
-    <md-card>
-      <md-list class="app-list">
-        <md-list-item *ngFor="let food of foods">
-          <h3 md-line>{{food.name}}</h3>
-          <p md-line class="demo-secondary-text">{{food.rating}}</p>
-        </md-list-item>
-      </md-list>
-    </md-card>
-
-    <md-card>
-      <md-spinner class="app-spinner"></md-spinner>
-      <md-spinner color="accent" class="app-spinner"></md-spinner>
-    </md-card>
-
-    <md-card>
-      <label>
-        Indeterminate progress-bar
-        <md-progress-bar
-            class="app-progress"
-            mode="indeterminate"
-            aria-label="Indeterminate progress-bar example"></md-progress-bar>
-      </label>
-
-      <label>
-        Determinate progress bar - {{progress}}%
-        <md-progress-bar
-            class="app-progress"
-            color="accent"
-            mode="determinate"
-            [value]="progress"
-            aria-label="Determinate progress-bar example"></md-progress-bar>
-      </label>
-    </md-card>
-
-    <md-card>
-      <md-tab-group>
-        <md-tab label="Earth">
-          <p>EARTH</p>
-        </md-tab>
-        <md-tab label="Fire">
-          <p>FIRE</p>
-        </md-tab>
-      </md-tab-group>
-    </md-card>
-
-    <md-card>
-      <md-icon>build</md-icon>
-    </md-card>
-
-    <md-card>
-      <button md-button [md-menu-trigger-for]="menu">
-        MENU
-      </button>
-    </md-card>
-
-    <md-menu #menu="mdMenu">
-      <button md-menu-item>Lemon</button>
-      <button md-menu-item>Lime</button>
-      <button md-menu-item>Banana</button>
-    </md-menu>
-
-    <md-card>
-      <p>Last dialog result: {{lastDialogResult}}</p>
-      <button md-raised-button (click)="openDialog()">DIALOG</button>
-      <button md-raised-button (click)="showSnackbar()">SNACKBAR</button>
-    </md-card>-->

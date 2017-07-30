@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DataService } from '../data.service';
-import { CryptoBalance } from '../cryptobalance';
+import { CryptoBalance, WalletSummary } from '../cryptobalance';
 import { Ticker } from 'app/ticker';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'tulip-account ',
@@ -13,24 +13,10 @@ export class AccountComponent implements OnInit {
 
   @Input()
   balances: CryptoBalance[];
-
-  lastBtc: CryptoBalance;
-  lastEth: CryptoBalance;
-  btc: CryptoBalance;
-  eth: CryptoBalance;
-  lastEthbtc: Ticker;
-  lastbtczar: Ticker;
+  summary: WalletSummary;
   ethbtc: Ticker;
   btczar: Ticker;
   lastUpdate: string;
-
-  gainLossPercent: number;
-  gainLoss: number;
-  totalRand: number;
-  totalBTC: number;
-  title = 'app';
-  investment = 1000;
-  fees = 45;
   loading = true;
 
   constructor(private dataService: DataService) {
@@ -42,39 +28,14 @@ export class AccountComponent implements OnInit {
     setInterval(() => this.refresh(), 30 * 1000);
   }
 
-
-
-
   refresh() {
     this.loading = true;
-    const lunoBitcoin$ = this.dataService.getValue('xbt');
-    const bitfinexEther$ = this.dataService.getValue('eth');
-    const ether2bitcoin$ = this.dataService.getRate('ethbtc');
-    const bitcoin2rand$ = this.dataService.getRate('XBTZAR')
+    const wallets$ = this.dataService.getWallets();
+    const summary$ = this.dataService.getSummary();
 
-    Observable.forkJoin([lunoBitcoin$, bitfinexEther$, ether2bitcoin$, bitcoin2rand$])
+    Observable.forkJoin([wallets$, summary$])
       .subscribe((results: any[]) => {
-        this.lastEthbtc = this.ethbtc;
-        this.lastbtczar = this.btczar;
-        this.lastBtc = this.btc;
-        this.lastEth = this.eth;
-
-        [this.btc, this.eth, this.ethbtc, this.btczar] = results;
-
-        this.balances = [this.btc, this.eth];
-
-        this.totalBTC = this.btc.baseValue + this.eth.baseValue * +this.ethbtc.price;
-        this.totalRand = Math.round(this.totalBTC * +this.btczar.price * 100) / 100;
-
-        this.btc.randValue = Math.round(this.btc.baseValue * +this.btczar.price * 100) / 100;
-        this.eth.randValue = Math.round(this.eth.baseValue * +this.ethbtc.price * +this.btczar.price * 100) / 100;
-
-        this.btc.change = this.lastBtc ? Math.round((this.btc.randValue - this.lastBtc.randValue) * 100) / 100 : 0;
-        this.eth.change = this.lastEth ? Math.round((this.eth.randValue - this.lastEth.randValue) * 100) / 100 : 0;
-
-        const actualInvestment = this.investment - this.fees;
-        this.gainLoss = Math.round((this.totalRand - actualInvestment) * 100) / 100;
-        this.gainLossPercent = Math.round(this.gainLoss / actualInvestment * 10000) / 100;
+        [this.balances, this.summary] = results;
         this.loading = false;
         this.lastUpdate = new Date().toLocaleTimeString();
       });

@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/merge';
 import 'rxjs/add/observable/forkJoin';
 
-import { CryptoBalance } from './cryptobalance';
+import { CryptoBalance, WalletSummary } from './cryptobalance';
 import { Ticker } from 'app/ticker';
 
 // const server = 'http://continuousdeveloper.com:8080';
@@ -19,13 +19,16 @@ export class DataService {
 
   constructor(private http: Http) { }
 
-  getValue(currency): Observable<CryptoBalance> {
+  getWallets(): Observable<CryptoBalance[]> {
     return this.http
       .get(`${server}/api/wallets/current`)
-      .map(response => response.json() as CryptoBalance[])
-      .map((balances) => {
-        return balances.filter((bal: CryptoBalance) => bal.baseCurrency === currency)[0];
-      });
+      .map(response => response.json() as CryptoBalance[]);
+  }
+
+  getSummary(): Observable<WalletSummary> {
+    return this.http
+      .get(`${server}/api/wallets/summary`)
+      .map(response => response.json() as WalletSummary);
   }
 
   getRate(ticker: string): Observable<Ticker> {

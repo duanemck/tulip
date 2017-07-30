@@ -2,6 +2,24 @@ export class CryptoBalance {
   baseValue: number;
   baseCurrency: string;
   source: string;
-  randValue: number;
-  change: number;
+
+  currentValueRand: number;
+
+  openingPriceBase: number;
+  openingValueRand: number;
+
+  changeTodayRand: number;
+  changeTodayPercent: number;
+  changeSinceStartRand: number;
+  changeSinceStartPercent: number;
+
+}
+
+export class WalletSummary {
+  totalBTC;
+  totalRand;
+  gainLoss;
+  gainLossPercent;
+  investment;
+  fees;
 }
