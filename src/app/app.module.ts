@@ -11,8 +11,10 @@ import { RouterModule } from '@angular/router';
 
 import {
   MdSidenavModule, MdToolbarModule, MdMenuModule, MdCardModule,
-  MdButtonModule, MdIconModule, MdProgressSpinnerModule
+  MdButtonModule, MdIconModule, MdProgressSpinnerModule, MdTableModule
 } from '@angular/material';
+
+import { CdkTableModule } from '@angular/cdk'
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RatesComponent } from './rates/rates.component';
@@ -36,6 +38,8 @@ import { ChartModule } from 'angular2-chartjs';
     MdCardModule,
     MdButtonModule,
     MdIconModule,
+    CdkTableModule,
+    MdTableModule,
     MdProgressSpinnerModule,
     FlexLayoutModule,
     RouterModule.forRoot([

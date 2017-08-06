@@ -18,6 +18,9 @@ export class CryptoBalance {
 export class WalletSummary {
   totalBTC;
   totalRand;
+  todayChange;
+  todayChangePercent;
+
   gainLoss;
   gainLossPercent;
   investment;

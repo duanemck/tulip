@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'tulip-rates ',
+  selector: 'tulip-rates',
   templateUrl: './rates.component.html',
   styleUrls: ['./rates.component.css']
 })

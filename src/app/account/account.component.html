@@ -1,45 +1,55 @@
-Updated: {{lastUpdate}}
-
-<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="start center">
-  <md-card fxFlex *ngIf="summary">
+<div>
+  Updated: {{lastUpdate}}
+</div>
+<div>
+  <md-card fxFlex>
     <md-card-title>
-      <span class="source">Performance</span>
-    </md-card-title>
-    <md-card-content>Initial : R{{summary.investment}} less R{{summary.fees}} fees</md-card-content>
-    <md-card-content>Profit/Loss : R{{summary.gainLoss}} ({{summary.gainLossPercent}}%)</md-card-content>
-  </md-card>
-  <md-card fxFlex *ngIf="balances">
-    <md-card-title>
-      <span class="source">Combined</span>
+      <span class="source">Portfolio</span>
     </md-card-title>
     <md-card-content>
-      <span class="value"><img src="assets/xbt.png" class="symbol"/></span>
-      <span class="value"> {{summary.totalBTC}} = R {{summary.totalRand}}</span>
+      <md-table #table [dataSource]="dataSource">
+        <ng-container cdkColumnDef="source">
+          <md-header-cell *cdkHeaderCellDef> Source </md-header-cell>
+          <md-cell *cdkCellDef="let row"> {{row.source}} </md-cell>
+        </ng-container>
+        <ng-container cdkColumnDef="base">
+          <md-header-cell *cdkHeaderCellDef> Balance </md-header-cell>
+          <md-cell *cdkCellDef="let row"><img src="assets/{{row.baseCurrency}}.png" class="symbol" /> {{row.baseValue | number:'1.2-10'}} </md-cell>
+        </ng-container>
+        <ng-container cdkColumnDef="rand">
+          <md-header-cell *cdkHeaderCellDef> Rand </md-header-cell>
+          <md-cell *cdkCellDef="let row">R {{row.currentValueRand | number:'1.2-2'}} </md-cell>
+        </ng-container>
+        <ng-container cdkColumnDef="today">
+          <md-header-cell *cdkHeaderCellDef> Change Today </md-header-cell>
+          <md-cell *cdkCellDef="let row">
+            <md-icon style="color:green" *ngIf="row.changeTodayRand > 0">arrow_upward</md-icon>
+            <md-icon style="color:red" *ngIf="row.changeTodayRand < 0">arrow_downward</md-icon>
+            <span style="white-space: nowrap">R {{row.changeTodayRand | number:'1.2-2'}} ({{row.changeTodayPercent | percent}})</span>
+          </md-cell>
+        </ng-container>
+        <ng-container cdkColumnDef="pl">
+          <md-header-cell *cdkHeaderCellDef> Profit/Loss </md-header-cell>
+          <md-cell *cdkCellDef="let row">
+            <md-icon style="color:green" *ngIf="row.changeSinceStartRand > 0">arrow_upward</md-icon>
+            <md-icon style="color:red"   *ngIf="row.changeSinceStartRand < 0">arrow_downward</md-icon>
+            <span style="white-space: nowrap">R {{row.changeSinceStartRand | number:'1.2-2'}} ({{row.changeSinceStartPercent | percent}})</span>
+           </md-cell>
+        </ng-container>
+        <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+        <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
+      </md-table>
+
     </md-card-content>
   </md-card>
-
-
 </div>
-<hr/>
-
-<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="start center">
-  <md-card fxFlex *ngFor="let balance of balances">
+<div>
+  <md-card fxFlex>
     <md-card-title>
-      <span class="source">{{balance.source}}</span>
+      <span class="source">Rates</span>
     </md-card-title>
     <md-card-content>
-      <div>
-        <span class="value"><img src="assets/{{balance.baseCurrency}}.png" class="symbol"/></span>
-        <span class="value"> {{balance.baseValue}} =  {{balance.currentValueRand | currency:'ZAR'}}</span>
-      </div>
-      <div>
-        <span class="value"> Today: {{balance.changeTodayRand | currency:'ZAR'}}</span>
-        <span class="value"> ({{balance.changeTodayPercent | percent}})</span>
-      </div>
-      <div>
-        <span class="value"> Overall: {{balance.changeSinceStartRand | currency:'ZAR'}}</span>
-        <span class="value"> ({{balance.changeSinceStartPercent | percent}})</span>
-      </div>
+      <tulip-rates></tulip-rates>
     </md-card-content>
   </md-card>
 </div>
