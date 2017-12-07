@@ -11,9 +11,7 @@ import * as moment from 'moment';
   styleUrls: ['./rates.component.css']
 })
 export class RatesComponent implements OnInit {
-
-  @Input()
-  balances: CryptoBalance[];
+  @Input() balances: CryptoBalance[];
 
   lastEthbtc: Ticker;
   lastbtczar: Ticker;
@@ -27,17 +25,7 @@ export class RatesComponent implements OnInit {
   zarxbtGraph2: Object;
   zarethGraph2: Object;
 
-
   type = 'line';
-  data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        label: 'My First dataset',
-        data: [65, 59, 80, 81, 56, 55, 40]
-      }
-    ]
-  };
   options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -45,24 +33,10 @@ export class RatesComponent implements OnInit {
       point: {
         radius: 0
       }
-    },
-    // scales: {
-    //   xAxes: {
-    //     type: 'time',
-    //     unit: 'hour',
-    //     unitStepSize: 1,
-    //     time: {
-    //       displayFormats: {
-    //         'hour': 'HH:mm'
-    //       }
-    //     }
-    //   }
-    // }
+    }
   };
 
-  constructor(private dataService: DataService) {
-
-  }
+  constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
     this.refresh();
@@ -77,70 +51,43 @@ export class RatesComponent implements OnInit {
 
   refresh() {
     this.loading = true;
-    const ether2bitcoin$ = this.dataService.getRate('ethbtc');
-    const bitcoin2rand$ = this.dataService.getRate('XBTZAR')
+    const bitcoin2rand$ = this.dataService.getRate('XBTZAR');
 
-    Observable.forkJoin([ether2bitcoin$, bitcoin2rand$])
-      .subscribe((results: any[]) => {
-        this.lastEthbtc = this.ethbtc;
-        this.lastbtczar = this.btczar;
-
-        const [ethbtc, btczar] = results;
-
-        this.ethbtc = ethbtc;
-        this.btczar = btczar;
-
-        this.loading = false;
-        this.lastUpdate = new Date().toLocaleTimeString();
-      });
+    bitcoin2rand$.subscribe(btczar => {
+      this.lastbtczar = this.btczar;
+      this.btczar = btczar;
+      this.loading = false;
+      this.lastUpdate = new Date().toLocaleTimeString();
+    });
 
     const bitcoinRate$ = this.dataService.getIntraday('XBTZAR');
-    const etherRate$ = this.dataService.getIntraday('ethbtc');
 
-    Observable.forkJoin([bitcoinRate$, etherRate$])
-      .subscribe((results: Ticker[][]) => {
-        const [btczar, ethbtc] = results;
-
-        this.zarxbtGraph = this.buildGraphOptions('ZAR/XBT Today', btczar, true);
-
-        const calculated = [];
-        for (let i = 0; i < btczar.length; i++) {
-          if (btczar[i] && ethbtc[i]) {
-            calculated.push({
-              time: btczar[i].time,
-              price: btczar[i].price * ethbtc[i].price
-            });
-          }
-        }
-        this.zarethGraph = this.buildGraphOptions('ZAR/ETH Today', calculated, true);
-      });
+    bitcoinRate$.subscribe(btczar => {
+      this.zarxbtGraph = this.buildGraphOptions('ZAR/BTC Today', btczar, true);
+    });
 
     const bitcoinDaily$ = this.dataService.getDaily('XBTZAR');
-    const etherDaily$ = this.dataService.getDaily('ethbtc');
 
-    Observable.forkJoin([bitcoinDaily$, etherDaily$])
-      .subscribe((results: Ticker[][]) => {
-        const [btczar, ethbtc] = results;
-
-        this.zarxbtGraph2 = this.buildGraphOptions('ZAR/XBT Daily', btczar, false);
-
-        const calculated = [];
-        for (let i = 0; i < btczar.length; i++) {
-          if (btczar[i] && ethbtc[i]) {
-            calculated.push({
-              date: btczar[i].date,
-              price: btczar[i].price * ethbtc[i].price
-            });
-          }
-        }
-        this.zarethGraph2 = this.buildGraphOptions('ZAR/ETH Daily', calculated, false);
-      });
-
+    bitcoinDaily$.subscribe(btczar => {
+      this.zarxbtGraph2 = this.buildGraphOptions(
+        'ZAR/BTC Daily',
+        btczar,
+        false
+      );
+    });
   }
 
-  private buildGraphOptions(title: string, tickerData: Ticker[], intraday: boolean) {
+  private buildGraphOptions(
+    title: string,
+    tickerData: Ticker[],
+    intraday: boolean
+  ) {
     return {
-      labels: tickerData.map(t => moment(intraday ? t.time : t.date).format(intraday ? 'HH:mm' : 'YYYY-MM-DD')),
+      labels: tickerData.map(t =>
+        moment(intraday ? t.time : t.date).format(
+          intraday ? 'HH:mm' : 'YYYY-MM-DD'
+        )
+      ),
       datasets: [
         {
           label: title,
@@ -152,7 +99,12 @@ export class RatesComponent implements OnInit {
 
   private toIntradayGraphData(data: Ticker[]) {
     return data.map(t => {
-      const x = [moment(t.time).add(2, 'hours').format('HH:mm'), t.price];
+      const x = [
+        moment(t.time)
+          .add(2, 'hours')
+          .format('HH:mm'),
+        t.price
+      ];
       return x;
     });
   }
@@ -164,6 +116,3 @@ export class RatesComponent implements OnInit {
     });
   }
 }
-
-
-
