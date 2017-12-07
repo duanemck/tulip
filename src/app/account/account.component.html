@@ -9,8 +9,8 @@
     <md-card-content>
       <md-table #table [dataSource]="dataSource">
         <ng-container cdkColumnDef="source">
-          <md-header-cell *cdkHeaderCellDef> Source </md-header-cell>
-          <md-cell *cdkCellDef="let row"> {{row.source}} </md-cell>
+          <md-header-cell *cdkHeaderCellDef>Source</md-header-cell>
+          <md-cell *cdkCellDef="let row"> <a *ngIf="row.url" href="{{row.url}}" target="_blank">{{row.source}}</a> <span *ngIf="!row.url">{{row.source}}</span> </md-cell>
         </ng-container>
         <ng-container cdkColumnDef="base">
           <md-header-cell *cdkHeaderCellDef> Balance </md-header-cell>
