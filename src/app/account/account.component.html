@@ -2,7 +2,7 @@
   Updated: {{lastUpdate}}
 </div>
 <div>
-  <md-card fxFlex>
+  <md-card fxFlex class="portfolio">
     <md-card-title>
       <span class="source">Portfolio</span>
     </md-card-title>
@@ -10,11 +10,15 @@
       <md-table #table [dataSource]="dataSource">
         <ng-container cdkColumnDef="source">
           <md-header-cell *cdkHeaderCellDef>Source</md-header-cell>
-          <md-cell *cdkCellDef="let row"> <a *ngIf="row.url" href="{{row.url}}" target="_blank">{{row.source}}</a> <span *ngIf="!row.url">{{row.source}}</span> </md-cell>
+          <md-cell *cdkCellDef="let row">
+            <a *ngIf="row.url" href="{{row.url}}" target="_blank">{{row.source}}</a>
+            <span *ngIf="!row.url">{{row.source}}</span>
+          </md-cell>
         </ng-container>
         <ng-container cdkColumnDef="base">
           <md-header-cell *cdkHeaderCellDef> Balance </md-header-cell>
-          <md-cell *cdkCellDef="let row"><img src="assets/{{row.baseCurrency}}.png" class="symbol" /> {{row.baseValue | number:'1.2-10'}} </md-cell>
+          <md-cell *cdkCellDef="let row">
+            <img src="assets/{{row.baseCurrency}}.png" class="symbol" /> {{row.baseValue | number:'1.2-10'}} </md-cell>
         </ng-container>
         <ng-container cdkColumnDef="rand">
           <md-header-cell *cdkHeaderCellDef> Rand </md-header-cell>
@@ -32,15 +36,78 @@
           <md-header-cell *cdkHeaderCellDef> Profit/Loss </md-header-cell>
           <md-cell *cdkCellDef="let row">
             <md-icon style="color:green" *ngIf="row.changeSinceStartRand > 0">arrow_upward</md-icon>
-            <md-icon style="color:red"   *ngIf="row.changeSinceStartRand < 0">arrow_downward</md-icon>
+            <md-icon style="color:red" *ngIf="row.changeSinceStartRand < 0">arrow_downward</md-icon>
             <span style="white-space: nowrap">R {{row.changeSinceStartRand | number:'1.2-2'}} ({{row.changeSinceStartPercent | percent}})</span>
-           </md-cell>
+          </md-cell>
         </ng-container>
         <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
         <md-row *cdkRowDef="let row; columns: displayedColumns;"></md-row>
       </md-table>
 
     </md-card-content>
+  </md-card>
+
+  <md-card fxFlex class="portfolio-mobile">
+    <md-card-title>
+      <span class="source">Portfolio</span>
+    </md-card-title>
+    <md-card-content>
+      <div *ngFor="let wallet of wallets$ | async">
+        <h2>{{wallet.source}}</h2>
+        <h4>Value</h4>
+        <div style="display:flex; flex-direction: row">
+          <div>
+            BTC {{wallet.baseValue | number:'1.2-10'}}</div>
+          <div>&nbsp;=&nbsp;</div>
+          <div>R {{wallet.currentValueRand | number:'1.2-2'}}</div>
+
+        </div>
+
+        <div>
+          <h4>Today</h4>
+          <md-icon style="color:green" *ngIf="wallet.changeTodayRand > 0">arrow_upward</md-icon>
+          <md-icon style="color:red" *ngIf="wallet.changeTodayRand < 0">arrow_downward</md-icon>
+          <span style="white-space: nowrap">R {{wallet.changeTodayRand | number:'1.2-2'}} ({{wallet.changeTodayPercent | percent}})</span>
+
+        </div>
+        <div>
+          <h4>Profit/Loss</h4>
+          <md-icon style="color:green" *ngIf="wallet.changeSinceStartRand > 0">arrow_upward</md-icon>
+          <md-icon style="color:red" *ngIf="wallet.changeSinceStartRand < 0">arrow_downward</md-icon>
+          <span style="white-space: nowrap">R {{wallet.changeSinceStartRand | number:'1.2-2'}} ({{wallet.changeSinceStartPercent | percent}})</span>
+
+        </div>
+      </div>
+      <hr/>
+      <div *ngIf="summary">
+        <h2>Summary</h2>
+        <h4>Value</h4>
+        <div style="display:flex; flex-direction: row">
+          <div>
+            BTC {{summary.totalBTC | number:'1.2-10'}}</div>
+          <div>&nbsp;=&nbsp;</div>
+          <div>R {{summary.totalRand | number:'1.2-2'}}</div>
+
+        </div>
+
+        <div>
+          <h4>Today</h4>
+          <md-icon style="color:green" *ngIf="summary.todayChange > 0">arrow_upward</md-icon>
+          <md-icon style="color:red" *ngIf="summary.todayChange < 0">arrow_downward</md-icon>
+          <span style="white-space: nowrap">R {{summary.todayChange | number:'1.2-2'}}</span>
+
+        </div>
+        <div>
+          <h4>Profit/Loss</h4>
+          <md-icon style="color:green" *ngIf="summary.gainLoss > 0">arrow_upward</md-icon>
+          <md-icon style="color:red" *ngIf="summary.gainLoss < 0">arrow_downward</md-icon>
+          <span style="white-space: nowrap">R {{summary.gainLoss| number:'1.2-2'}} ({{summary.gainLossPercent | percent}})</span>
+
+        </div>
+      </div>
+
+    </md-card-content>
+
   </md-card>
 </div>
 <div>

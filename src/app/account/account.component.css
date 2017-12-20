@@ -1,39 +1,50 @@
 .source {
-  font-size:30px;
-  color:#3f51b5;
+    font-size: 30px;
+    color: #3f51b5;
 }
 
 .example-container {
-  display: flex;
-  flex-direction: column;
-  max-height: 500px;
-  min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
 }
 
 .example-header {
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  padding-left: 24px;
-  font-size: 20px;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    padding-left: 24px;
+    font-size: 20px;
 }
 
 .example-header {
-  min-height: 64px;
-  display: flex;
-  align-items: baseline;
-  padding: 8px 24px 0;
-  font-size: 20px;
-  justify-content: space-between;
+    min-height: 64px;
+    display: flex;
+    align-items: baseline;
+    padding: 8px 24px 0;
+    font-size: 20px;
+    justify-content: space-between;
 }
 
 .mat-input-container {
-  font-size: 14px;
-  flex-grow: 1;
-  margin-left: 32px;
+    font-size: 14px;
+    flex-grow: 1;
+    margin-left: 32px;
 }
 
 .mat-table {
-  overflow: auto;
+    overflow: auto;
 }
 
+@media screen and (max-width: 600px) {
+    .portfolio {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 601px) {
+    .portfolio-mobile {
+        display: none;
+    }
+}
