@@ -25,7 +25,7 @@ export class AccountComponent implements OnInit {
     dataSource: BalanceDataSource | null;
 
     wallets$: Observable<CryptoBalance[]>;
-    wallets: CryptoBalance[];
+    mobilewallets: CryptoBalance[];
 
     constructor(private dataService: DataService) {}
     ngOnInit() {
@@ -60,7 +60,7 @@ export class AccountComponent implements OnInit {
         });
 
         this.dataSource = new BalanceDataSource(table$);
-        this.wallets$.subscribe(wallets => (this.wallets = wallets));
+        this.wallets$.subscribe(wallets => (this.mobilewallets = wallets));
         summary$.subscribe(sum => (this.summary = sum));
     }
 }
