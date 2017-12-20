@@ -51,7 +51,7 @@
     <md-card-title>
       <span class="source">Portfolio</span>
     </md-card-title>
-    <md-card-content *ngIf="wallet">
+    <md-card-content *ngIf="wallets">
       <div *ngFor="let wallet of wallets | async">
         <h2>{{wallet.source}}</h2>
         <h4>Value</h4>
