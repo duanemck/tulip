@@ -51,8 +51,8 @@
     <md-card-title>
       <span class="source">Portfolio</span>
     </md-card-title>
-    <md-card-content>
-      <div *ngFor="let wallet of wallets$ | async">
+    <md-card-content *ngIf="wallet">
+      <div *ngFor="let wallet of wallets | async">
         <h2>{{wallet.source}}</h2>
         <h4>Value</h4>
         <div style="display:flex; flex-direction: row">
